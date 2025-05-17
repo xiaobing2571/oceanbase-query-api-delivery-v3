@@ -57,7 +57,7 @@ public class TemplateController {
         }
     }
 
-    @GetMapping("/list")
+    @GetMapping
     @Operation(summary = "List SQL Templates", description = "Lists all SQL templates.")
     public ResponseEntity<ApiResponse<List<SqlTemplateDto>>> listTemplates() {
         ApiResponse<List<SqlTemplateDto>> response = templateService.listTemplates();
@@ -66,6 +66,13 @@ public class TemplateController {
         } else {
             return ResponseEntity.badRequest().body(response);
         }
+    }
+    
+    @GetMapping("/list")
+    @Operation(summary = "List SQL Templates (Legacy)", description = "Lists all SQL templates (Legacy endpoint).")
+    public ResponseEntity<ApiResponse<List<SqlTemplateDto>>> listTemplatesLegacy() {
+        // 调用相同的服务方法，保持向后兼容
+        return listTemplates();
     }
 
     @GetMapping("/scene/{sceneCode}")

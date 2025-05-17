@@ -2,7 +2,7 @@
 
 -- 1. 数据源配置
 INSERT INTO datasource_config (datasource_id, db_type, url, username, password, extra_config) VALUES
-('ob-cluster-prod', 'OCEANBASE', 'jdbc:oceanbase://ob-cluster.example.com:2883/oceanbase', 'admin', 'password123', '{"ssl": false, "connectTimeout": 5000}'),
+('ob-cluster-prod', 'OCEANBASE', 'jdbc:oceanbase://obmt6a2ewvdhoj1c.huawei-cn-north-4-internet.oceanbase.cloud:3306/bx', 'bx', 'OceanBase_123#', '{"ssl": false, "connectTimeout": 5000}'),
 ('ob-cluster-test', 'OCEANBASE', 'jdbc:oceanbase://ob-test.example.com:2883/oceanbase', 'test_user', 'test_pass', '{"ssl": false, "connectTimeout": 3000}'),
 ('mysql-meta', 'MYSQL', 'jdbc:mysql://mysql.example.com:3306/metadata', 'meta_user', 'meta_pass', '{"ssl": true}');
 

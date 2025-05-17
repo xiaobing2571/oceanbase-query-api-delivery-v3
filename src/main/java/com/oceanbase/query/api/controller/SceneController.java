@@ -57,7 +57,7 @@ public class SceneController {
         }
     }
 
-    @GetMapping("/list")
+    @GetMapping
     @Operation(summary = "List Query Scenes", description = "Lists all registered query scenes.")
     public ResponseEntity<ApiResponse<List<SceneDto>>> listScenes() {
         ApiResponse<List<SceneDto>> response = sceneService.listScenes();
@@ -66,6 +66,13 @@ public class SceneController {
         } else {
             return ResponseEntity.badRequest().body(response);
         }
+    }
+    
+    @GetMapping("/list")
+    @Operation(summary = "List Query Scenes (Legacy)", description = "Lists all registered query scenes (Legacy endpoint).")
+    public ResponseEntity<ApiResponse<List<SceneDto>>> listScenesLegacy() {
+        // 调用相同的服务方法，保持向后兼容
+        return listScenes();
     }
     
     @PutMapping("/{sceneCode}")

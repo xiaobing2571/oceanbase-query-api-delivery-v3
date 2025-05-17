@@ -69,7 +69,7 @@ public class DatasourceController {
         }
     }
 
-    @GetMapping("/list")
+    @GetMapping
     @Operation(summary = "List Datasource Configurations", description = "Lists all registered datasource configurations.")
     public ResponseEntity<ApiResponse<List<DatasourceConfigDto>>> listDatasources() {
         ApiResponse<List<DatasourceConfigDto>> response = datasourceService.listDatasources();
@@ -78,5 +78,12 @@ public class DatasourceController {
         } else {
             return ResponseEntity.badRequest().body(response);
         }
+    }
+    
+    @GetMapping("/list")
+    @Operation(summary = "List Datasource Configurations (Legacy)", description = "Lists all registered datasource configurations (Legacy endpoint).")
+    public ResponseEntity<ApiResponse<List<DatasourceConfigDto>>> listDatasourcesLegacy() {
+        // 调用相同的服务方法，保持向后兼容
+        return listDatasources();
     }
 }
