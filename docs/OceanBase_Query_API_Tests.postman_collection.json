@@ -1,0 +1,822 @@
+{
+	"info": {
+		"_postman_id": "b5c7e8f9-3a12-4e5d-9f8a-6d2c1b3e4f5a",
+		"name": "OceanBase 通用查询 API 测试",
+		"description": "OceanBase 通用查询 API 服务的 Postman 测试集合，覆盖所有主要接口和场景。",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "数据源管理",
+			"item": [
+				{
+					"name": "测试数据源连通性",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// 验证响应状态码为 200",
+									"pm.test(\"状态码为 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// 验证响应格式为 JSON",
+									"pm.test(\"响应格式为 JSON\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"// 验证响应包含成功状态",
+									"pm.test(\"响应包含成功状态\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"datasource_type\": \"direct\",\n  \"datasource_config\": {\n    \"url\": \"jdbc:oceanbase://localhost:2881/oceanbase\",\n    \"username\": \"root\",\n    \"password\": \"password\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/query/v1/datasource/test",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"query",
+								"v1",
+								"datasource",
+								"test"
+							]
+						},
+						"description": "测试数据源连通性，使用直接传入连接信息的方式。\n\n注意：此测试依赖真实数据源，需要配置有效的连接信息才能通过。"
+					},
+					"response": []
+				},
+				{
+					"name": "测试已注册数据源连通性",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// 验证响应状态码为 200",
+									"pm.test(\"状态码为 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// 验证响应格式为 JSON",
+									"pm.test(\"响应格式为 JSON\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"// 验证响应包含成功状态",
+									"pm.test(\"响应包含成功状态\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"datasource_type\": \"registered\",\n  \"datasource_id\": \"ob-cluster-prod\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/query/v1/datasource/test",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"query",
+								"v1",
+								"datasource",
+								"test"
+							]
+						},
+						"description": "测试已注册数据源的连通性，使用测试数据中预置的数据源ID。\n\n注意：此测试依赖真实数据源，需要确保数据库中已注册有效的数据源配置才能通过。"
+					},
+					"response": []
+				}
+			],
+			"description": "数据源管理相关接口测试，包括测试数据源连通性等。"
+		},
+		{
+			"name": "场景管理",
+			"item": [
+				{
+					"name": "获取所有场景",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// 验证响应状态码为 200",
+									"pm.test(\"状态码为 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// 验证响应格式为 JSON",
+									"pm.test(\"响应格式为 JSON\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"// 验证响应包含成功状态",
+									"pm.test(\"响应包含成功状态\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});",
+									"",
+									"// 验证响应包含场景列表",
+									"pm.test(\"响应包含场景列表\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data).to.be.an('array');",
+									"    // 注意：如果数据库未初始化，可能没有场景数据",
+									"    // pm.expect(jsonData.data.length).to.be.at.least(1);",
+									"});",
+									"",
+									"// 验证是否包含预置的场景（如果数据库已初始化）",
+									"pm.test(\"包含预置的场景（如果数据库已初始化）\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.data && jsonData.data.length > 0) {",
+									"        var sceneCodes = jsonData.data.map(function(scene) {",
+									"            return scene.scene_code;",
+									"        });",
+									"        ",
+									"        // 仅当数据库已初始化时才验证",
+									"        if (sceneCodes.length > 0) {",
+									"            pm.expect(sceneCodes).to.include.oneOf(['cluster_status_monitor', 'performance_diagnosis']);",
+									"        }",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/query/v1/scenes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"query",
+								"v1",
+								"scenes"
+							]
+						},
+						"description": "获取所有已注册的查询场景。\n\n注意：此测试依赖数据库中已初始化的场景数据，但不依赖真实的 OceanBase 数据源。"
+					},
+					"response": []
+				},
+				{
+					"name": "注册新场景",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// 验证响应状态码为 200",
+									"pm.test(\"状态码为 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// 验证响应格式为 JSON",
+									"pm.test(\"响应格式为 JSON\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"// 验证响应包含成功状态",
+									"pm.test(\"响应包含成功状态\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});",
+									"",
+									"// 验证响应包含新注册的场景信息",
+									"pm.test(\"响应包含新注册的场景信息\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data).to.be.an('object');",
+									"    pm.expect(jsonData.data.scene_code).to.eql(\"custom_test_scene\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"scene_code\": \"custom_test_scene\",\n  \"scene_name\": \"自定义测试场景\",\n  \"template_ids\": [\"ob_cluster_info\", \"ob_tenant_status\"],\n  \"description\": \"用于 Postman 测试的自定义场景\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/query/v1/scenes/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"query",
+								"v1",
+								"scenes",
+								"register"
+							]
+						},
+						"description": "注册一个新的查询场景，包含两个预置的模板。\n\n注意：此测试依赖数据库中已初始化的模板数据，但不依赖真实的 OceanBase 数据源。"
+					},
+					"response": []
+				}
+			],
+			"description": "场景管理相关接口测试，包括获取所有场景、注册新场景等。"
+		},
+		{
+			"name": "模板管理",
+			"item": [
+				{
+					"name": "获取所有模板",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// 验证响应状态码为 200",
+									"pm.test(\"状态码为 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// 验证响应格式为 JSON",
+									"pm.test(\"响应格式为 JSON\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"// 验证响应包含成功状态",
+									"pm.test(\"响应包含成功状态\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});",
+									"",
+									"// 验证响应包含模板列表",
+									"pm.test(\"响应包含模板列表\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data).to.be.an('array');",
+									"    // 注意：如果数据库未初始化，可能没有模板数据",
+									"    // pm.expect(jsonData.data.length).to.be.at.least(1);",
+									"});",
+									"",
+									"// 验证是否包含预置的模板（如果数据库已初始化）",
+									"pm.test(\"包含预置的模板（如果数据库已初始化）\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.data && jsonData.data.length > 0) {",
+									"        var templateIds = jsonData.data.map(function(template) {",
+									"            return template.template_id;",
+									"        });",
+									"        ",
+									"        // 仅当数据库已初始化时才验证",
+									"        if (templateIds.length > 0) {",
+									"            pm.expect(templateIds).to.include.oneOf(['ob_cluster_info', 'ob_tenant_status']);",
+									"        }",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/query/v1/templates",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"query",
+								"v1",
+								"templates"
+							]
+						},
+						"description": "获取所有已注册的 SQL 模板。\n\n注意：此测试依赖数据库中已初始化的模板数据，但不依赖真实的 OceanBase 数据源。"
+					},
+					"response": []
+				},
+				{
+					"name": "注册新模板",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// 验证响应状态码为 200",
+									"pm.test(\"状态码为 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// 验证响应格式为 JSON",
+									"pm.test(\"响应格式为 JSON\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"// 验证响应包含成功状态",
+									"pm.test(\"响应包含成功状态\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});",
+									"",
+									"// 验证响应包含新注册的模板信息",
+									"pm.test(\"响应包含新注册的模板信息\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data).to.be.an('object');",
+									"    pm.expect(jsonData.data.template_id).to.eql(\"custom_test_template\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"template_id\": \"custom_test_template\",\n  \"scene_code\": \"custom_test_scene\",\n  \"description\": \"用于 Postman 测试的自定义模板\",\n  \"db_type\": \"OCEANBASE\",\n  \"parameters\": [\n    { \"name\": \"tenant_name\", \"type\": \"string\", \"required\": false }\n  ],\n  \"version_mapping\": [\n    { \"version\": \">=4.0.0\", \"sql\": \"SELECT * FROM oceanbase.gv$tenant WHERE tenant_name = IFNULL(:tenant_name, tenant_name)\" },\n    { \"version\": \"<4.0.0\", \"sql\": \"SELECT * FROM oceanbase.__all_tenant WHERE tenant_name = IFNULL(:tenant_name, tenant_name)\" }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/query/v1/templates/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"query",
+								"v1",
+								"templates",
+								"register"
+							]
+						},
+						"description": "注册一个新的 SQL 模板，包含两个版本的 SQL 文本。\n\n注意：此测试依赖数据库中已初始化的场景数据，但不依赖真实的 OceanBase 数据源。"
+					},
+					"response": []
+				}
+			],
+			"description": "模板管理相关接口测试，包括获取所有模板、注册新模板等。"
+		},
+		{
+			"name": "查询执行",
+			"item": [
+				{
+					"name": "执行集群状态监控场景",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// 验证响应状态码为 200",
+									"pm.test(\"状态码为 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// 验证响应格式为 JSON",
+									"pm.test(\"响应格式为 JSON\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"// 注意：以下测试依赖真实数据源，可能会失败",
+									"// 验证响应包含成功状态",
+									"// pm.test(\"响应包含成功状态\", function () {",
+									"//     var jsonData = pm.response.json();",
+									"//     pm.expect(jsonData.status).to.eql(\"success\");",
+									"// });",
+									"",
+									"// 验证响应包含查询结果",
+									"// pm.test(\"响应包含查询结果\", function () {",
+									"//     var jsonData = pm.response.json();",
+									"//     pm.expect(jsonData.data).to.be.an('array');",
+									"// });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"datasource_type\": \"registered\",\n  \"datasource_id\": \"ob-cluster-prod\",\n  \"async\": false\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/query/v1/scenes/cluster_status_monitor/execute",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"query",
+								"v1",
+								"scenes",
+								"cluster_status_monitor",
+								"execute"
+							]
+						},
+						"description": "执行集群状态监控场景，使用同步方式。\n\n注意：此测试依赖真实的 OceanBase 数据源，需要配置有效的连接信息才能通过。测试断言已注释，仅验证基本响应格式。"
+					},
+					"response": []
+				},
+				{
+					"name": "执行性能诊断场景",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// 验证响应状态码为 200",
+									"pm.test(\"状态码为 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// 验证响应格式为 JSON",
+									"pm.test(\"响应格式为 JSON\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"// 注意：以下测试依赖真实数据源，可能会失败",
+									"// 验证响应包含成功状态",
+									"// pm.test(\"响应包含成功状态\", function () {",
+									"//     var jsonData = pm.response.json();",
+									"//     pm.expect(jsonData.status).to.eql(\"success\");",
+									"// });",
+									"",
+									"// 验证响应包含查询结果",
+									"// pm.test(\"响应包含查询结果\", function () {",
+									"//     var jsonData = pm.response.json();",
+									"//     pm.expect(jsonData.data).to.be.an('array');",
+									"// });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"datasource_type\": \"registered\",\n  \"datasource_id\": \"ob-cluster-prod\",\n  \"extra_params\": {\n    \"tenant_id\": 1001,\n    \"start_time\": \"2025-05-01T00:00:00Z\",\n    \"end_time\": \"2025-05-16T00:00:00Z\",\n    \"threshold_ms\": 2000\n  },\n  \"async\": false\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/query/v1/scenes/performance_diagnosis/execute",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"query",
+								"v1",
+								"scenes",
+								"performance_diagnosis",
+								"execute"
+							]
+						},
+						"description": "执行性能诊断场景，使用同步方式，并传入额外参数。\n\n注意：此测试依赖真实的 OceanBase 数据源，需要配置有效的连接信息才能通过。测试断言已注释，仅验证基本响应格式。"
+					},
+					"response": []
+				},
+				{
+					"name": "异步执行备份恢复监控场景",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// 验证响应状态码为 200",
+									"pm.test(\"状态码为 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// 验证响应格式为 JSON",
+									"pm.test(\"响应格式为 JSON\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"// 注意：以下测试依赖真实数据源，可能会失败",
+									"// 验证响应包含成功状态",
+									"// pm.test(\"响应包含成功状态\", function () {",
+									"//     var jsonData = pm.response.json();",
+									"//     pm.expect(jsonData.status).to.eql(\"success\");",
+									"// });",
+									"",
+									"// 验证响应包含任务ID",
+									"// pm.test(\"响应包含任务ID\", function () {",
+									"//     var jsonData = pm.response.json();",
+									"//     pm.expect(jsonData.taskId).to.be.a('string');",
+									"//     ",
+									"//     // 保存任务ID供后续测试使用",
+									"//     pm.environment.set(\"taskId\", jsonData.taskId);",
+									"// });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"datasource_type\": \"registered\",\n  \"datasource_id\": \"ob-cluster-prod\",\n  \"extra_params\": {\n    \"tenant_id\": 1001,\n    \"start_time\": \"2025-05-01T00:00:00Z\",\n    \"end_time\": \"2025-05-16T00:00:00Z\"\n  },\n  \"async\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/query/v1/scenes/backup_recovery_monitor/execute",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"query",
+								"v1",
+								"scenes",
+								"backup_recovery_monitor",
+								"execute"
+							]
+						},
+						"description": "异步执行备份恢复监控场景，并保存任务ID供后续测试使用。\n\n注意：此测试依赖真实的 OceanBase 数据源，需要配置有效的连接信息才能通过。测试断言已注释，仅验证基本响应格式。"
+					},
+					"response": []
+				},
+				{
+					"name": "获取异步任务结果",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// 验证响应状态码为 200",
+									"pm.test(\"状态码为 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// 验证响应格式为 JSON",
+									"pm.test(\"响应格式为 JSON\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"// 注意：以下测试依赖真实数据源，可能会失败",
+									"// 验证响应包含状态",
+									"// pm.test(\"响应包含状态\", function () {",
+									"//     var jsonData = pm.response.json();",
+									"//     pm.expect(jsonData.status).to.be.oneOf([\"success\", \"pending\", \"running\", \"failed\"]);",
+									"// });",
+									"",
+									"// 如果状态为成功，验证响应包含查询结果",
+									"// pm.test(\"如果状态为成功，响应包含查询结果\", function () {",
+									"//     var jsonData = pm.response.json();",
+									"//     if (jsonData.status === \"success\") {",
+									"//         pm.expect(jsonData.data).to.be.an('array');",
+									"//     }",
+									"// });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/query/v1/result/{{taskId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"query",
+								"v1",
+								"result",
+								"{{taskId}}"
+							]
+						},
+						"description": "获取异步任务的执行结果，使用之前保存的任务ID。\n\n注意：此测试依赖真实的 OceanBase 数据源和前一个异步执行测试，需要配置有效的连接信息才能通过。测试断言已注释，仅验证基本响应格式。"
+					},
+					"response": []
+				}
+			],
+			"description": "查询执行相关接口测试，包括同步执行、异步执行和获取异步任务结果等。\n\n注意：此文件夹中的测试依赖真实的 OceanBase 数据源，需要配置有效的连接信息才能通过。测试断言已注释，仅验证基本响应格式。"
+		},
+		{
+			"name": "内置场景测试",
+			"item": [
+				{
+					"name": "执行合并监控场景",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// 验证响应状态码为 200",
+									"pm.test(\"状态码为 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// 验证响应格式为 JSON",
+									"pm.test(\"响应格式为 JSON\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"// 注意：以下测试依赖真实数据源，可能会失败",
+									"// 验证响应包含成功状态",
+									"// pm.test(\"响应包含成功状态\", function () {",
+									"//     var jsonData = pm.response.json();",
+									"//     pm.expect(jsonData.status).to.eql(\"success\");",
+									"// });",
+									"",
+									"// 验证响应包含查询结果",
+									"// pm.test(\"响应包含查询结果\", function () {",
+									"//     var jsonData = pm.response.json();",
+									"//     pm.expect(jsonData.data).to.be.an('array');",
+									"// });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"datasource_type\": \"registered\",\n  \"datasource_id\": \"ob-cluster-prod\",\n  \"extra_params\": {\n    \"tenant_id\": 1001\n  },\n  \"async\": false\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/query/v1/scenes/merge_monitor/execute",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"query",
+								"v1",
+								"scenes",
+								"merge_monitor",
+								"execute"
+							]
+						},
+						"description": "执行合并监控场景，使用同步方式。\n\n注意：此测试依赖真实的 OceanBase 数据源，需要配置有效的连接信息才能通过。测试断言已注释，仅验证基本响应格式。"
+					},
+					"response": []
+				},
+				{
+					"name": "执行租户资源使用场景",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// 验证响应状态码为 200",
+									"pm.test(\"状态码为 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// 验证响应格式为 JSON",
+									"pm.test(\"响应格式为 JSON\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"// 注意：以下测试依赖真实数据源，可能会失败",
+									"// 验证响应包含成功状态",
+									"// pm.test(\"响应包含成功状态\", function () {",
+									"//     var jsonData = pm.response.json();",
+									"//     pm.expect(jsonData.status).to.eql(\"success\");",
+									"// });",
+									"",
+									"// 验证响应包含查询结果",
+									"// pm.test(\"响应包含查询结果\", function () {",
+									"//     var jsonData = pm.response.json();",
+									"//     pm.expect(jsonData.data).to.be.an('array');",
+									"// });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"datasource_type\": \"registered\",\n  \"datasource_id\": \"ob-cluster-prod\",\n  \"extra_params\": {\n    \"tenant_name\": \"sys\"\n  },\n  \"async\": false\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/query/v1/scenes/tenant_resource_usage/execute",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"query",
+								"v1",
+								"scenes",
+								"tenant_resource_usage",
+								"execute"
+							]
+						},
+						"description": "执行租户资源使用场景，使用同步方式，并指定租户名称。\n\n注意：此测试依赖真实的 OceanBase 数据源，需要配置有效的连接信息才能通过。测试断言已注释，仅验证基本响应格式。"
+					},
+					"response": []
+				}
+			],
+			"description": "测试所有内置场景，确保它们能正常执行并返回结果。\n\n注意：此文件夹中的测试依赖真实的 OceanBase 数据源，需要配置有效的连接信息才能通过。测试断言已注释，仅验证基本响应格式。"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}

@@ -1,0 +1,12 @@
+com/oceanbase/query/api/controller/TemplateControllerTest.class
+com/oceanbase/query/api/service/QueryServiceImplTest.class
+com/oceanbase/query/api/service/DatasourceServiceImplTest.class
+com/oceanbase/query/api/service/TemplateServiceImplTest.class
+com/oceanbase/query/api/service/DatasourceServiceImplTest$1.class
+com/oceanbase/query/api/controller/DatasourceControllerTest.class
+com/oceanbase/query/api/service/SceneServiceImplTest$1.class
+com/oceanbase/query/api/service/SceneServiceImplTest.class
+com/oceanbase/query/api/service/TemplateServiceImplTest$1.class
+com/oceanbase/query/api/controller/QueryControllerTest.class
+com/oceanbase/query/api/DemoApplicationTests.class
+com/oceanbase/query/api/controller/SceneControllerTest.class

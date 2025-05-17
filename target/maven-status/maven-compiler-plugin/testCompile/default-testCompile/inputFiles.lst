@@ -1,0 +1,9 @@
+/home/ubuntu/oceanbase-query-api/src/test/java/com/oceanbase/query/api/controller/DatasourceControllerTest.java
+/home/ubuntu/oceanbase-query-api/src/test/java/com/oceanbase/query/api/service/QueryServiceImplTest.java
+/home/ubuntu/oceanbase-query-api/src/test/java/com/oceanbase/query/api/DemoApplicationTests.java
+/home/ubuntu/oceanbase-query-api/src/test/java/com/oceanbase/query/api/controller/QueryControllerTest.java
+/home/ubuntu/oceanbase-query-api/src/test/java/com/oceanbase/query/api/controller/TemplateControllerTest.java
+/home/ubuntu/oceanbase-query-api/src/test/java/com/oceanbase/query/api/service/DatasourceServiceImplTest.java
+/home/ubuntu/oceanbase-query-api/src/test/java/com/oceanbase/query/api/controller/SceneControllerTest.java
+/home/ubuntu/oceanbase-query-api/src/test/java/com/oceanbase/query/api/service/TemplateServiceImplTest.java
+/home/ubuntu/oceanbase-query-api/src/test/java/com/oceanbase/query/api/service/SceneServiceImplTest.java
